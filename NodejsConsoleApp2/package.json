@@ -1,0 +1,13 @@
+{
+  "name": "nodejs-console-app2",
+  "version": "0.0.0",
+  "description": "NodejsConsoleApp2",
+  "main": "app.js",
+  "author": {
+    "name": "matrix"
+  },
+  "dependencies": {
+    "express": "^4.14.1",
+    "mysql": "^2.13.0"
+  }
+}
