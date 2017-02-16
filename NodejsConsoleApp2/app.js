@@ -1,4 +1,8 @@
-﻿var http = require('http');
+﻿// može se koristiti postman aplikacija za slanje post,get,delete i put requesta nazad u server
+// 
+
+
+var http = require('http');
 var mysql = require('mysql');
 var bodyParser = require("body-parser");
 var express = require('express');
@@ -13,16 +17,17 @@ var pool = mysql.createPool({
     
 });
 
-// definiranje zadane (defaultne) rute za naš API
+// definiranje zadane rute 
 var apiRoutes = express.Router();
 
 var port = 9000; 
+// namještanje da zaprima informacije od postmana za edit,write i change u bazi.
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
-
-// testiranje rute (GET http://localhost:8080/api)
 apiRoutes.get('/', function (req, res) {
-    //ako je sve ispravno postavljeno kao odgovor ćemo dobiti ovu poruku
+    
     res.json({ message: 'API radi!' });
 });
 
@@ -33,11 +38,11 @@ apiRoutes.post('/dodajime', function (req, res, next) {
 
         if (err) {
             console.error("Dogodila se greška: " + err);
-        }
+        } else
 
         var korisnik = {
-            Ime: req.body.ime,
-            Prezime: req.body.prezime
+            First_Name: req.body.ime,
+            Last_Name: req.body.prezime
         };
 
         connection.query('INSERT INTO imena SET ?', korisnik,
@@ -92,11 +97,11 @@ apiRoutes.put('/korisnik/:id', function (req, res, next) {
         }
 
         var korisnik = {
-            k_ime: req.body.ime,
-            k_prezime: req.body.prezime
+            First_Name: req.body.ime,
+            Last_Name: req.body.prezime
         };
 
-        connection.query('update imena SET ? where id = ?', [korisnik, req.params.k_id],
+        connection.query('update imena SET ? where id = ?', [korisnik, req.params.id],
             function (err, rows) {
                 if (err) {
                     return next(err);
@@ -124,7 +129,7 @@ apiRoutes.delete('/korisnik/:id', function (req, res, next) {
             console.error("Dogodila se greška: " + err);
         }
 
-        connection.query('delete from imena where id = ?', [req.params.k_id],
+        connection.query('delete from imena where id = ?', [req.params.id],
 
             function (err, rows) {
                 if (err) {
@@ -146,6 +151,6 @@ apiRoutes.delete('/korisnik/:id', function (req, res, next) {
 // sve rute sadržavati će /api
 app.use('/api', apiRoutes);
 
-// pokretanje API-ja
+// pokretanje 
 app.listen(port);
 console.log('API radi @ port:' + ' ' + port);
